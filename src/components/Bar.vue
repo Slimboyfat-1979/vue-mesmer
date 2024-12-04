@@ -1,40 +1,61 @@
 <template>
-    <div :class="barName" :style="{backgroundColor: color}"></div>
+  <div
+    :class="[
+      barName,
+      { start: showStarted, paused: animationState === 'paused' },
+    ]"
+    :style="{ backgroundColor: color }"
+  ></div>
 </template>
 
 <script>
-    export default {
-        props: ['color', 'barName']
-    }
+export default {
+  props: ["color", "barName", "animationState"],
+  data() {
+    return {
+      showStarted: false, // control start of animation
+    };
+  },
+  mounted() {
+    // Start the animation when the component mounts
+    this.showStarted = true;
+  },
+};
 </script>
 
 <style scoped>
-    div {
-        position: absolute;
-        height: 60px;
-        width: 100px;
-        left: 90%;
-        animation: move 180s linear infinite forwards;
-    }
+div {
+  position: absolute;
+  height: 60px;
+  width: 100px;
+  left: 100%;
+}
 
-    .one {
-        top: 40%;
-    }
+div.start {
+  animation: move 90s linear infinite forwards;
+}
 
-    .two {
-        top: 60%;
-    }
+div.paused {
+  animation-play-state: paused;
+}
 
-    @keyframes move {
-        0% {
-            left: 90%
-        }
-        50% {
-            left: 0
-        }
-        100%{
-            left: 90%
-        }
-    }
+.one {
+  top: 40%;
+}
 
+.two {
+  top: 60%;
+}
+
+@keyframes move {
+  0% {
+    left: 100%;
+  }
+  50% {
+    left: 0;
+  }
+  100% {
+    left: 100%;
+  }
+}
 </style>

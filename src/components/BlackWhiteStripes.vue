@@ -1,7 +1,7 @@
 <template>
     <div class="container">
-        <Bar barName="one" color="white"></Bar>
-        <Bar barName="two" color="black"></Bar>
+        <Bar v-bind:class="{start: showStarted}" barName="one" color="white" :animationState="animationState"></Bar>
+        <Bar v-bind:class="{start: showStarted}" barName="two" color="black" :animationState="animationState"></Bar>
         <div v-for="item in items" :key="item" class="strip">
             <div class="white"></div>
             <div class="black"></div>
@@ -21,10 +21,13 @@
         data() {
             return {
                 items: [],
-                barWidth: 2
+                barWidth: 2,
+                showStarted: false,
+                animationState: ''
             }
         },
         mounted() {
+            this.audio = new Audio('./src/assets/music/background.mp3');
             this.calcNumberOfBars();
             window.addEventListener('resize', this.calcNumberOfBars);
         },
@@ -36,9 +39,15 @@
                 this.items = Array(numberOfBars).fill(0)
             },
             startShow() {
-                const audio = new Audio('./src/assets/music/background.mp3');
-                audio.play();
-            
+                if(!this.showStarted) {
+                    this.showStarted = true;
+                    this.audio.play();
+                    this.animationState = 'running'
+                }else{
+                    this.showStarted = false;
+                    this.audio.pause();
+                    this.animationState = 'paused';
+                }
             }
         }
         
